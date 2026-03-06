@@ -1,0 +1,54 @@
+# =========================
+# macOS system files
+# =========================
+.DS_Store
+*.swp
+*.swo
+
+# =========================
+# Node / frontend
+# =========================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+dist/
+build/
+.env
+.env.local
+.env.*.local
+
+# =========================
+# Elixir / Phoenix
+# =========================
+_build/
+deps/
+*.ez
+*.beam
+cover/
+rel/
+*.secret
+*.dump
+*.sqlite3
+*.db
+
+# =========================
+# Editor / IDE
+# =========================
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+*.iml
+
+# =========================
+# Misc
+# =========================
+log/
+tmp/
+*.log
+*.local

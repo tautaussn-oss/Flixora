@@ -1,6 +1,7 @@
 defmodule Flixora.Movies do
   alias Flixora.Repo
   alias Flixora.Movies.Movie
+  import Ecto.Query
 
   def list_all do
     Repo.all(Movie)
@@ -26,4 +27,10 @@ defmodule Flixora.Movies do
     |> Movie.changeset(attrs)
     |> Repo.update()
   end
+
+  def search_movies(query) do
+    from( m in Movie , where: ilike(m.title,^"%#{query}%"))
+    |> Repo.all()
+  end
+
 end

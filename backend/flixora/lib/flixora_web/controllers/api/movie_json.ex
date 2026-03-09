@@ -17,4 +17,7 @@ defmodule FlixoraWeb.Api.MovieJSON do
       year: movie.year
     }
   end
+
+
+
 end

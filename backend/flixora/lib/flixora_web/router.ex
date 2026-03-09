@@ -5,7 +5,7 @@ defmodule FlixoraWeb.Router do
     plug(:accepts, ["json"])
   end
 
-  scope "/api", FlixoraWeb do
+  scope "/api", FlixoraWeb.Api do
     pipe_through(:api)
 
     get("/movies", MovieController, :index)

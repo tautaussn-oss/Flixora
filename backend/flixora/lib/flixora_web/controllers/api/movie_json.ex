@@ -24,4 +24,6 @@ defmodule FlixoraWeb.Api.MovieJSON do
     data(movie)
 
    end
+
+
 end

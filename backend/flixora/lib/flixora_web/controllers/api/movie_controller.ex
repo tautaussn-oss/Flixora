@@ -1,4 +1,4 @@
-defmodule FlixoraWeb.MovieController do
+defmodule FlixoraWeb.Api.MovieController do
   use FlixoraWeb, :controller
 
   alias Flixora.Repo
@@ -6,6 +6,6 @@ defmodule FlixoraWeb.MovieController do
 
   def index(conn, _params) do
     movies = Repo.all(Movie)
-    json(conn, movies)
+    render(conn, :index, movies: movies)
   end
 end

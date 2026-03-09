@@ -8,9 +8,8 @@ defmodule FlixoraWeb.Router do
   scope "/api", FlixoraWeb.Api do
     pipe_through :api
 
-    get "/movies", MovieController , :index
-
-
+    get "/movies", MovieController, :index
+    get "/movies/:id", MovieController, :show
   end
 
   # # Enable LiveDashboard and Swoosh mailbox preview in development

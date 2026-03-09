@@ -20,4 +20,8 @@ defmodule FlixoraWeb.Api.MovieJSON do
 
 
 
+   def show(%{movie: movie})  do
+    data(movie)
+
+   end
 end

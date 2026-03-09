@@ -16,6 +16,4 @@ defmodule Flixora.Movies.Movie do
     |> cast(attrs, [:title, :description, :year])
     |> validate_required([:title, :description, :year])
   end
-  
-
 end

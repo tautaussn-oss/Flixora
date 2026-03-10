@@ -6,6 +6,7 @@ defmodule Flixora.Movies.Movie do
     field(:title, :string)
     field(:description, :string)
     field(:year, :integer)
+    field(:trailer_embed, :string)
 
     timestamps(type: :utc_datetime)
   end
@@ -13,7 +14,7 @@ defmodule Flixora.Movies.Movie do
   @doc false
   def changeset(movie, attrs) do
     movie
-    |> cast(attrs, [:title, :description, :year])
+    |> cast(attrs, [:title, :description, :year, :trailer_embed])
     |> validate_required([:title, :description, :year])
   end
 end

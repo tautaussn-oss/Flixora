@@ -14,7 +14,7 @@ defmodule Flixora.Movies.Movie do
   @doc false
   def changeset(movie, attrs) do
     movie
-    |> cast(attrs, [:title, :description, :year, :image_path])
+    |> cast(attrs, [:title, :description, :year, :image_path, :trailer_embed])
     |> validate_required([:title, :description, :year])
   end
 end

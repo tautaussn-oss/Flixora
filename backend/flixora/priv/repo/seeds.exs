@@ -24,7 +24,6 @@ images = %{
   20 => "topgun.jpg"
 }
 
-Enum.each(images, fn {id, image} ->
 trailers = %{
   # Inception
   1 => "https://www.youtube.com/embed/YoHD9XEInc0",
@@ -73,8 +72,17 @@ Enum.each(trailers, fn {id, trailer} ->
 
   if movie do
     movie
-    |> Movie.changeset(%{image_path: image})
     |> Movie.changeset(%{trailer_embed: trailer})
+    |> Repo.update!()
+  end
+end)
+
+Enum.each(images, fn {id, image} ->
+  movie = Repo.get(Movie, id)
+
+  if movie do
+    movie
+    |> Movie.changeset(%{image_path: image})
     |> Repo.update!()
   end
 end)

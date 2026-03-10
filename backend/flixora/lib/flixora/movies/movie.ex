@@ -7,6 +7,7 @@ defmodule Flixora.Movies.Movie do
     field(:description, :string)
     field(:year, :integer)
     field(:image_path, :string)
+    field(:trailer_embed, :string)
 
     timestamps(type: :utc_datetime)
   end

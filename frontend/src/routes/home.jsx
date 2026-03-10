@@ -12,16 +12,13 @@ const Home = () => {
       setMovies(moviesData);
       setLoading(false);
     };
-
     fetchMovies();
   }, []);
-
-  const getRandomImage = (id) =>
-    `https://picsum.photos/seed/${id}/400/600`;
 
   return (
     <div className="mt-6 grid gap-6 px-6">
 
+      {/* Header */}
       <div className="bg-white/80 backdrop-blur-md p-12 rounded-3xl shadow-lg border border-white/40
                       flex flex-col items-center justify-center text-center
                       transform transition duration-300 hover:scale-105 hover:shadow-2xl w-full">
@@ -35,18 +32,19 @@ const Home = () => {
         <p className="text-gray-700 text-center mt-4">Loading movies...</p>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-
           {movies.map((movie) => (
             <Link key={movie.id} to={`/movie/${movie.id}`}>
               <div className="relative overflow-hidden rounded-3xl shadow-lg border border-white/40
                               transform transition duration-300 hover:scale-105 cursor-pointer">
 
+                {/* Movie Image */}
                 <img
-                  src={getRandomImage(movie.id)}
+                  src={`http://localhost:4000/images/${movie.image_path}`}
                   alt={movie.title}
                   className="w-full h-96 object-cover"
                 />
 
+                {/* Overlay sa informacijama */}
                 <div className="absolute inset-0 bg-black/70 opacity-0 hover:opacity-100
                                 flex flex-col justify-center items-center text-center
                                 text-white p-4 transition-opacity duration-300">
@@ -58,7 +56,6 @@ const Home = () => {
               </div>
             </Link>
           ))}
-
         </div>
       )}
     </div>

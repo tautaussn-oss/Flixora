@@ -16,7 +16,8 @@ defmodule FlixoraWeb.Api.MovieJSON do
       description: movie.description,
       year: movie.year,
       image_path: movie.image_path,
-      trailer_embed: movie.trailer_embed
+      trailer_embed: movie.trailer_embed,
+      rating: movie.rating
     }
   end
 

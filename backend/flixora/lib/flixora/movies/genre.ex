@@ -1,6 +1,7 @@
 defmodule Flixora.Movies.Genre do
   use Ecto.Schema
   import Ecto.Changeset
+  alias Flixora.Movies.Movie
 
   schema "genres" do
     field(:genre, :string)

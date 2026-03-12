@@ -1,21 +1,15 @@
 defmodule FlixoraWeb.GenreJSON do
 
-  def index (%{"genres"=> genres}) do
-   %{
-       for (genre <- genres ,
-
-       do: data(genre) )
-
-
-     }
+  def index(%{genres: genres}) do
+    %{
+      data: for(genre <- genres, do: data(genre))
+    }
   end
-
 
   def data(genre) do
     %{
-         id: genre.id
-         genre: genre.genre
-
+      id: genre.id,
+      genre: genre.genre
     }
   end
 

@@ -13,6 +13,7 @@ defmodule FlixoraWeb.Router do
     post "/movies", MovieContoller, :create
     delete "/movies/:id", MovieContoller, :delete
     put "/movies/:id", MovieController, :update
+    get "/genres", GenreController,:index
   end
 
   # # Enable LiveDashboard and Swoosh mailbox preview in development

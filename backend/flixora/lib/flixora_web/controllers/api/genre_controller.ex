@@ -1,4 +1,4 @@
-defmodule FlixoraWeb.GenreController do
+defmodule FlixoraWeb.Api.GenreController do
 
   use FlixoraWeb,:controller
 

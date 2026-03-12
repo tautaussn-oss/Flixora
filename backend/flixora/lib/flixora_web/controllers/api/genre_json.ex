@@ -1,4 +1,4 @@
-defmodule FlixoraWeb.GenreJSON do
+defmodule FlixoraWeb.Api.GenreJSON do
 
   def index(%{genres: genres}) do
     %{

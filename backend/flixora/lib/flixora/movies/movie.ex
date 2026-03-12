@@ -9,6 +9,8 @@ defmodule Flixora.Movies.Movie do
     field(:image_path, :string)
     field(:trailer_embed, :string)
 
+    many_to_many(:genres, Genre, join_through: "movie_genres", on_replace: :delete)
+
     timestamps(type: :utc_datetime)
   end
 

@@ -1,32 +1,28 @@
-import { useState, useEffect } from "react";
-
 export const useFavorites = () => {
-  const [favorites, setFavorites] = useState([]);
 
-  
-  useEffect(() => {
+  const getFavorites = () => {
     const stored = localStorage.getItem("favorites");
-    if (stored) {
-      setFavorites(JSON.parse(stored));
-    }
-  }, []);
-
-  
-  useEffect(() => {
-    localStorage.setItem("favorites", JSON.stringify(favorites));
-  }, [favorites]);
-
- 
-  const toggleFavorite = (movie) => {
-    const exists = favorites.find((m) => m.id === movie.id);
-    if (exists) {
-      
-      setFavorites(favorites.filter((m) => m.id !== movie.id));
-    } else {
-      
-      setFavorites([...favorites, movie]);
-    }
+    return stored ? JSON.parse(stored) : [];
   };
 
-  return { favorites, toggleFavorite };
+  const toggleFavorite = (movie) => {
+    const favorites = getFavorites();
+
+    const exists = favorites.some((m) => m.id === movie.id);
+
+    let updatedFavorites;
+
+    if (exists) {
+      updatedFavorites = favorites.filter((m) => m.id !== movie.id);
+    } else {
+      updatedFavorites = [...favorites, movie];
+    }
+
+    localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
+  };
+
+  return {
+    favorites: getFavorites(),
+    toggleFavorite,
+  };
 };

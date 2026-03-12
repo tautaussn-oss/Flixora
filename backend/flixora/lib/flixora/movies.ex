@@ -1,7 +1,9 @@
 defmodule Flixora.Movies do
   alias Flixora.Repo
   alias Flixora.Movies.Movie
+  alias Flixora.Movies.Genre
   import Ecto.Query
+
 
   def list_all do
     Repo.all(Movie)
@@ -33,4 +35,7 @@ defmodule Flixora.Movies do
     |> Repo.all()
   end
 
+  def list_genres do
+    Repo.all(Genre)
+  end
 end

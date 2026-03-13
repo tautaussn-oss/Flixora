@@ -1,14 +1,39 @@
 import Config
 
+# Load environment vars from .env in development
+case File.read(".env") do
+  {:ok, contents} ->
+    contents
+    |> String.split("\n", trim: true)
+    |> Enum.each(fn line ->
+      case String.split(line, "=", parts: 2) do
+        [key, value] ->
+          System.put_env(String.trim(key), String.trim(value)) |> dbg()
+
+        _ ->
+          :ok
+      end
+    end)
+
+  {:error, _reason} ->
+    :ok
+end
+
+database_url =
+  System.get_env("DATABASE_URL") ||
+    raise """
+    environment variable DATABASE_URL is missing.
+    For example: ecto://USER:PASS@HOST/DATABASE
+    """
+
 # Configure your database
 config :flixora, Flixora.Repo,
-  username: "postgres",
-  password: "postgres",
-  hostname: "localhost",
-  database: "flixora_dev",
+  url: database_url,
+  ssl: true,
   stacktrace: true,
-  show_sensitive_data_on_connection_error: true,
-  pool_size: 10
+  show_sensitive_data_on_connection_error: true
+
+# pool_size: 10
 
 # For development, we disable any cache and enable
 # debugging and code reloading.

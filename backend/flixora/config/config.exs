@@ -16,11 +16,11 @@ config :flixora, FlixoraWeb.Endpoint,
   url: [host: "localhost"],
   adapter: Bandit.PhoenixAdapter,
   render_errors: [
-    formats: [json: FlixoraWeb.ErrorJSON],
+    formats: [html: FlixoraWeb.ErrorHTML, json: FlixoraWeb.ErrorJSON],
     layout: false
   ],
   pubsub_server: Flixora.PubSub,
-  live_view: [signing_salt: "fzfq4+TO"]
+  live_view: [signing_salt: "gS0HW1h4"]
 
 # Configures the mailer
 #

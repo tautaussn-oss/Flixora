@@ -1,13 +1,40 @@
 defmodule FlixoraWeb.Router do
   use FlixoraWeb, :router
 
+  pipeline :browser do
+    plug :accepts, ["html"]
+    plug :fetch_session
+    plug :fetch_live_flash
+    plug :put_root_layout, html: {FlixoraWeb.Layouts, :root}
+    plug :protect_from_forgery
+    plug :put_secure_browser_headers
+  end
+
   pipeline :api do
     plug :accepts, ["json"]
   end
 
-  scope "/api", FlixoraWeb do
-    pipe_through :api
+  scope "/", FlixoraWeb do
+    pipe_through :browser
+
+    get "/", PageController, :home
   end
+
+  scope "/api", FlixoraWeb.Api do
+    pipe_through :api
+
+    get "/shows", ShowController, :index
+    get "/shows/:id", ShowController, :show
+    get "/movies", MovieController, :index
+    get "/movies/:id", MovieController, :show
+    get "/genres", GenreController, :index
+    get "/actors", ActorController, :index
+  end
+
+  # Other scopes may use custom stacks.
+  # scope "/api", FlixoraWeb do
+  #   pipe_through :api
+  # end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
   if Application.compile_env(:flixora, :dev_routes) do
@@ -19,7 +46,7 @@ defmodule FlixoraWeb.Router do
     import Phoenix.LiveDashboard.Router
 
     scope "/dev" do
-      pipe_through [:fetch_session, :protect_from_forgery]
+      pipe_through :browser
 
       live_dashboard "/dashboard", metrics: FlixoraWeb.Telemetry
       forward "/mailbox", Plug.Swoosh.MailboxPreview

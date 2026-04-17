@@ -16,6 +16,25 @@ import Config
 #
 # Alternatively, you can use `mix phx.gen.release` to generate a `bin/server`
 # script that automatically sets the env var above.
+
+case File.read(".env") do
+  {:ok, contents} ->
+    contents
+    |> String.split("\n", trim: true)
+    |> Enum.each(fn line ->
+      case String.split(line, "=", parts: 2) do
+        [key, value] ->
+          System.put_env(String.trim(key), String.trim(value))
+
+        _ ->
+          :ok
+      end
+    end)
+
+  {:error, _reason} ->
+    :ok
+end
+
 if System.get_env("PHX_SERVER") do
   config :flixora, FlixoraWeb.Endpoint, server: true
 end
@@ -31,7 +50,7 @@ if config_env() == :prod do
   maybe_ipv6 = if System.get_env("ECTO_IPV6") in ~w(true 1), do: [:inet6], else: []
 
   config :flixora, Flixora.Repo,
-    # ssl: true,
+    ssl: true,
     url: database_url,
     pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10"),
     # For machines with several cores, consider starting multiple pools of `pool_size`
@@ -50,7 +69,7 @@ if config_env() == :prod do
       You can generate one by calling: mix phx.gen.secret
       """
 
-  host = System.get_env("PHX_HOST") || "example.com"
+  host = System.get_env("RENDER_EXTERNAL_HOSTNAME") || "localhost"
   port = String.to_integer(System.get_env("PORT") || "4000")
 
   config :flixora, :dns_cluster_query, System.get_env("DNS_CLUSTER_QUERY")

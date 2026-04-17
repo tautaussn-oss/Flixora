@@ -17,7 +17,7 @@ config :flixora, Flixora.Repo,
 # you can enable the server option below.
 config :flixora, FlixoraWeb.Endpoint,
   http: [ip: {127, 0, 0, 1}, port: 4002],
-  secret_key_base: "NpNKoMxmFuNYWweclxQZ0F2sp7tftqY5QveysZse+Fy2eB4/ZHtXrEV7Jsvy4TW8",
+  secret_key_base: "kDxpQywbuo3JSNoiAn89kPIbqFvzrnRRhKQAgpLLgZ3NOGFDVMmMykSrwlSRU5mA",
   server: false
 
 # In test we don't send emails
@@ -31,3 +31,7 @@ config :logger, level: :warning
 
 # Initialize plugs at runtime for faster test compilation
 config :phoenix, :plug_init_mode, :runtime
+
+# Enable helpful, but potentially expensive runtime checks
+config :phoenix_live_view,
+  enable_expensive_runtime_checks: true

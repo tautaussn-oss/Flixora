@@ -20,6 +20,17 @@ defmodule FlixoraWeb.Router do
     get "/", PageController, :home
   end
 
+  scope "/api", FlixoraWeb.Api do
+    pipe_through :api
+
+    get "/shows", ShowController, :index
+    get "/shows/:id", ShowController, :show
+    get "/movies", MovieController, :index
+    get "/movies/:id", MovieController, :show
+    get "/genres", GenreController, :index
+    get "/actors", ActorController, :index
+  end
+
   # Other scopes may use custom stacks.
   # scope "/api", FlixoraWeb do
   #   pipe_through :api

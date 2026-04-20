@@ -1,5 +1,5 @@
 defmodule FlixoraWeb.Api.ShowJSON do
-  alias Flixora.Show
+  alias Flixora.Shows.Show
 
   def index(%{shows: shows}) do
     %{shows: Enum.map(shows, &data/1)}
@@ -25,7 +25,4 @@ defmodule FlixoraWeb.Api.ShowJSON do
       actors: Enum.map(show.actors, & &1.name)
     }
   end
-
-
-
 end

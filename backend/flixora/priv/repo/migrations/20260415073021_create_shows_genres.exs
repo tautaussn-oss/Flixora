@@ -3,8 +3,9 @@ defmodule Flixora.Repo.Migrations.CreateShowsGenres do
 
   def change do
     create table(:shows_genres) do
-      add :show_id, references(:shows, on_delete: :delete_all)
-      add :genre_id, references(:genres, on_delete: :delete_all)
+      add :show_id, references(:shows, on_delete: :delete_all), null: false
+      add :genre_id, references(:genres, on_delete: :delete_all), null: false
+      timestamps()
     end
 
     create unique_index(:shows_genres, [:show_id, :genre_id])

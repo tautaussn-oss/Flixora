@@ -69,7 +69,9 @@ defmodule Flixora.MixProject do
       {:cors_plug, "~> 3.0"},
       {:dotenv, "~> 3.0"},
       {:cloudex, "~> 1.4"},
-      {:excoveralls, "~> 0.18", only: :test}
+      {:excoveralls, "~> 0.18", only: :test},
+      {:bcrypt_elixir, "~> 3.0"},
+         {:joken, "~> 2.6"}
     ]
   end
 

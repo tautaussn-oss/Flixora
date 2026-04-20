@@ -9,14 +9,14 @@ defmodule FlixoraWeb.Api.ShowController do
   end
 
   def show(conn, %{"id" => id}) do
-  case Shows.get_show(id) do
-    {:ok, show} ->
-      render(conn, :show, show: show)
+    case Shows.get_show(id) do
+      {:ok, show} ->
+        render(conn, :show, show: show)
 
-    {:error, :not_found} ->
-      conn
-      |> put_status(:not_found)
-      |> json(%{error: "Movie not found"})
+      {:error, :not_found} ->
+        conn
+        |> put_status(:not_found)
+        |> json(%{error: "Movie not found"})
+    end
   end
-end
 end

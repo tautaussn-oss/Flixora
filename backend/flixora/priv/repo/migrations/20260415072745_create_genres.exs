@@ -3,10 +3,10 @@ defmodule Flixora.Repo.Migrations.CreateGenres do
 
   def change do
     create table(:genres) do
-      add :name, :string
+      add :name, :string, null: false
       timestamps()
     end
 
-    create index(:genres, [:name])
+    create unique_index(:genres, [:name])
   end
 end

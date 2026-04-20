@@ -22,6 +22,6 @@ defmodule Flixora.Repo.Migrations.CreateShows do
     create index(:shows, [:title])
     create index(:shows, [:year])
     create index(:shows, [:featured])
-    create index(:shows,[:kids])
+    create index(:shows, [:kids])
   end
 end

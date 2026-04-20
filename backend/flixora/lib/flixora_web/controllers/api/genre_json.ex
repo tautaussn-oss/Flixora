@@ -1,5 +1,5 @@
 defmodule FlixoraWeb.Api.GenreJSON do
-  alias Flixora.Genre
+  alias Flixora.Genres.Genre
 
   def index(%{genres: genres}) do
     %{genres: Enum.map(genres, &data/1)}

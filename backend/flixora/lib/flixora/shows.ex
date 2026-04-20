@@ -1,9 +1,9 @@
 defmodule Flixora.Shows do
   import Ecto.Query
   alias Flixora.Repo
-  alias Flixora.Show
-  alias Flixora.Genre
-  alias Flixora.Actor
+  alias Flixora.Shows.Show
+  alias Flixora.Genres.Genre
+  alias Flixora.Actors.Actor
   alias Flixora.Uploaders.Cloudinary
 
   @show_preloads [:genres, :actors, :ratings]
@@ -15,6 +15,7 @@ defmodule Flixora.Shows do
     |> filter_by_actor(params)
     |> filter_featured(params)
     |> filter_kids(params)
+    |> sort(params)
     |> preload(^@show_preloads)
     |> Repo.all()
   end
@@ -68,6 +69,20 @@ defmodule Flixora.Shows do
   end
 
   defp filter_kids(query, _), do: query
+
+  defp sort(query, %{"sort" => "year"}) do
+    from m in query, order_by: [desc: m.year]
+  end
+
+  defp sort(query, %{"sort" => "title"}) do
+    from m in query, order_by: [asc: m.title]
+  end
+
+  defp sort(query, %{"sort" => "duration"}) do
+    from m in query, order_by: [desc: m.duration]
+  end
+
+  defp sort(query, _), do: query
 
   def get_show(id) do
     case Repo.get(Show, id) do

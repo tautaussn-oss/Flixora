@@ -1,5 +1,5 @@
 defmodule FlixoraWeb.Api.ActorJSON do
-  alias Flixora.Actor
+  alias Flixora.Actors.Actor
 
   def index(%{actors: actors}) do
     %{actors: Enum.map(actors, &data/1)}

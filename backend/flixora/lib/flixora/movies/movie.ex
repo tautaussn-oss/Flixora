@@ -1,4 +1,4 @@
-defmodule Flixora.Movie do
+defmodule Flixora.Movies.Movie do
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -16,12 +16,14 @@ defmodule Flixora.Movie do
     field :featured, :boolean, default: false
     field :season, :integer
 
-    many_to_many :genres, Flixora.Genre, join_through: "movies_genres", on_replace: :delete
-    many_to_many :actors, Flixora.Actor, join_through: "movies_actors", on_replace: :delete
+    many_to_many :genres, Flixora.Genres.Genre, join_through: "movies_genres", on_replace: :delete
+    many_to_many :actors, Flixora.Actors.Actor, join_through: "movies_actors", on_replace: :delete
 
-    has_many :ratings, Flixora.Rating, foreign_key: :content_id, where: [content_type: "movie"]
+    has_many :ratings, Flixora.Ratings.Rating,
+      foreign_key: :content_id,
+      where: [content_type: "movie"]
 
-   timestamps()
+    timestamps()
   end
 
   def changeset(movie, attrs) do
@@ -48,7 +50,8 @@ defmodule Flixora.Movie do
     ])
     |> validate_number(:year, greater_than_or_equal_to: 1900, less_than_or_equal_to: 2100)
     |> validate_number(:duration, greater_than: 0)
-    |> validate_length(:title, min: 1, max: 255)
+    |> validate_length(:title, min: 2, max: 255)
     |> validate_length(:description, max: 1000)
+    |> validate_number(:season, greater_than: 0)
   end
 end

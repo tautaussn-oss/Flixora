@@ -1,9 +1,9 @@
 defmodule Flixora.Movies do
   import Ecto.Query
   alias Flixora.Repo
-  alias Flixora.Movie
-  alias Flixora.Genre
-  alias Flixora.Actor
+  alias Flixora.Movies.Movie
+  alias Flixora.Genres.Genre
+  alias Flixora.Actors.Actor
   alias Flixora.Uploaders.Cloudinary
 
   @movie_preloads [:genres, :actors, :ratings]
@@ -15,6 +15,7 @@ defmodule Flixora.Movies do
     |> filter_by_actor(params)
     |> filter_featured(params)
     |> filter_kids(params)
+    |> sort(params)
     |> preload(^@movie_preloads)
     |> Repo.all()
   end
@@ -75,6 +76,20 @@ defmodule Flixora.Movies do
       movie -> {:ok, Repo.preload(movie, @movie_preloads)}
     end
   end
+
+  defp sort(query, %{"sort" => "year"}) do
+    from m in query, order_by: [desc: m.year]
+  end
+
+  defp sort(query, %{"sort" => "title"}) do
+    from m in query, order_by: [asc: m.title]
+  end
+
+  defp sort(query, %{"sort" => "duration"}) do
+    from m in query, order_by: [desc: m.duration]
+  end
+
+  defp sort(query, _), do: query
 
   def create_movie(attrs) do
     attrs =

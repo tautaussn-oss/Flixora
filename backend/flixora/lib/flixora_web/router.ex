@@ -23,12 +23,18 @@ defmodule FlixoraWeb.Router do
   scope "/api", FlixoraWeb.Api do
     pipe_through :api
 
-    get "/shows", ShowController, :index
-    get "/shows/:id", ShowController, :show
-    get "/movies", MovieController, :index
-    get "/movies/:id", MovieController, :show
-    get "/genres", GenreController, :index
-    get "/actors", ActorController, :index
+    resources "/movies", MovieController, except: [:new, :edit]
+    resources "/shows", ShowController, excep: [:new, :edit]
+    resources "/genres", GenreController, only: [:index, :show]
+    resources "/actors", ActorController, only: [:index, :show]
+
+    get "/users", UserController, :index
+    get "users/:id", UserController, :show
+    post "/users", UserController, :create
+    put "/users/:id", UserController, :update
+    delete "/users/:id", UserController, :delete
+
+    post "/login", AuthController, :login
   end
 
   # Other scopes may use custom stacks.

@@ -8,8 +8,6 @@ defmodule Flixora.Repo.Migrations.CreateRatings do
       add :content_type, :string, null: false
       add :user_id, references(:users, on_delete: :delete_all), null: false
 
-
-
       timestamps()
     end
 

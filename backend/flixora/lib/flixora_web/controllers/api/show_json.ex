@@ -6,7 +6,7 @@ defmodule FlixoraWeb.Api.ShowJSON do
   end
 
   def show(%{show: show}) do
-    %{data: data(show)}
+    %{show: data(show)}
   end
 
   defp data(%Show{} = show) do
@@ -15,14 +15,21 @@ defmodule FlixoraWeb.Api.ShowJSON do
       title: show.title,
       description: show.description,
       year: show.year,
-      duration: show.duration,
-      poster: show.poster,
+      season: show.season,
+      trailer: show.trailer,
       featured: show.featured,
       kids: show.kids,
-      director: show.director,
-      publisher: show.publisher,
-      genres: Enum.map(show.genres, & &1.name),
-      actors: Enum.map(show.actors, & &1.name)
+      poster: show.poster,
+      genres: safe_entities(show.genres),
+      actors: safe_entities(show.actors)
     }
+  end
+
+  defp safe_entities(%Ecto.Association.NotLoaded{}), do: []
+
+  defp safe_entities(list) do
+    Enum.map(list, fn item ->
+      %{id: item.id, name: item.name}
+    end)
   end
 end

@@ -6,7 +6,7 @@ defmodule FlixoraWeb.Api.GenreJSON do
   end
 
   def show(%{genre: genre}) do
-    %{data: data(genre)}
+    %{genre: data(genre)}
   end
 
   defp data(%Genre{} = genre) do

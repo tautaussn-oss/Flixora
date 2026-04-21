@@ -11,6 +11,10 @@ defmodule FlixoraWeb.Api.ShowController do
   def index(conn, params) do
     shows = Shows.list_shows(params)
     render(conn, :index, shows: shows)
+
+  def index(conn, params) do
+    shows = Shows.list_shows(params)
+    json(conn, shows)
   end
 
   @doc "Returns a single show by ID."
@@ -48,6 +52,34 @@ defmodule FlixoraWeb.Api.ShowController do
     show_params = params["show"] || params
 
     case Shows.get_show(id) do
+        json(conn, show)
+
+      {:error, :not_found} ->
+        conn
+        |> put_status(:not_found)
+        |> json(%{error: "Show not found"})
+    end
+  end
+
+  def create(conn, params) do
+    case Shows.create_show(params) do
+      {:ok, show} ->
+        conn
+        |> put_status(:created)
+        |> json(show)
+
+      {:error, _} ->
+        conn
+        |> put_status(:bad_request)
+        |> json(%{error: "Invalid data"})
+    end
+  end
+
+  def update(conn, %{"id" => id} = params) do
+    case Shows.update_show(id, params) do
+      {:ok, show} ->
+        json(conn, show)
+
       {:error, :not_found} ->
         conn
         |> put_status(:not_found)
@@ -67,6 +99,14 @@ defmodule FlixoraWeb.Api.ShowController do
   end
 
   @doc "Deletes a show."
+      {:error, _} ->
+        conn
+        |> put_status(:bad_request)
+        |> json(%{error: "Update failed"})
+    end
+  end
+
+
   def delete(conn, %{"id" => id}) do
     case Shows.delete_show(id) do
       {:ok, _} ->

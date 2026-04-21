@@ -8,14 +8,12 @@ defmodule FlixoraWeb.Api.MovieController do
   alias Flixora.Movies
 
   @doc "Returns a list of movies with optional filters."
-
   def index(conn, params) do
     movies = Movies.list_movies(params)
-    json(conn, movies)
+    render(conn, :index, movies: movies)
   end
 
   @doc "Returns a single movie by ID."
-
   def show(conn, %{"id" => id}) do
     case Movies.get_movie(id) do
       {:error, :not_found} ->
@@ -44,53 +42,6 @@ defmodule FlixoraWeb.Api.MovieController do
         |> json(%{errors: format_errors(changeset)})
     end
   end
-        json(conn, movie)
-
-      {:error, :not_found} ->
-        conn
-        |> put_status(:not_found)
-        |> json(%{error: "Movie not found"})
-    end
-  end
-
-
-  def create(conn, params) do
-    case Movies.create_movie(params) do
-      {:ok, movie} ->
-        conn
-        |> put_status(:created)
-        |> json(movie)
-
-      {:error, _changeset} ->
-        conn
-        |> put_status(:bad_request)
-        |> json(%{error: "Invalid data"})
-    end
-  end
-
-
-  def update(conn, %{"id" => id} = params) do
-    case Movies.update_movie(id, params) do
-      {:ok, movie} ->
-        json(conn, movie)
-
-      {:error, :not_found} ->
-        conn
-        |> put_status(:not_found)
-        |> json(%{error: "Movie not found"})
-
-      {:error, _} ->
-        conn
-        |> put_status(:bad_request)
-        |> json(%{error: "Update failed"})
-    end
-  end
-
-
-  def delete(conn, %{"id" => id}) do
-    case Movies.delete_movie(id) do
-      {:ok, _} ->
-        send_resp(conn, :no_content, "")
 
   @doc "Updates an existing movie."
   def update(conn, %{"id" => id} = params) do

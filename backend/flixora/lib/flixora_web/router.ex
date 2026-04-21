@@ -27,9 +27,6 @@ defmodule FlixoraWeb.Router do
     resources "/shows", ShowController, except: [:new, :edit]
     resources "/genres", GenreController, only: [:index, :show]
     resources "/actors", ActorController, only: [:index, :show]
-    post "/movies", MovieController, :new
-    put "/movies/:id", MovieController, :edit
-
     get "/users", UserController, :index
     get "/users/:id", UserController, :show
     post "/users", UserController, :create

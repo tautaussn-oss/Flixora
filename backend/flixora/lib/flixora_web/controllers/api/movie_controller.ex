@@ -1,61 +1,72 @@
 defmodule FlixoraWeb.Api.MovieController do
+  @moduledoc """
+  API controller for managing movies.
+  """
+
   use FlixoraWeb, :controller
 
   alias Flixora.Movies
 
-
+  @doc "Returns a list of movies with optional filters."
   def index(conn, params) do
     movies = Movies.list_movies(params)
-    json(conn, movies)
+    render(conn, :index, movies: movies)
   end
 
-
+  @doc "Returns a single movie by ID."
   def show(conn, %{"id" => id}) do
     case Movies.get_movie(id) do
-      {:ok, movie} ->
-        json(conn, movie)
-
       {:error, :not_found} ->
         conn
         |> put_status(:not_found)
         |> json(%{error: "Movie not found"})
+
+      {:ok, movie} ->
+        render(conn, :show, movie: movie)
     end
   end
 
-
+  @doc "Creates a new movie."
   def create(conn, params) do
-    case Movies.create_movie(params) do
+    movie_params = params["movie"] || params
+
+    case Movies.create_movie(movie_params) do
       {:ok, movie} ->
         conn
         |> put_status(:created)
-        |> json(movie)
+        |> render(:show, movie: movie)
 
-      {:error, _changeset} ->
+      {:error, changeset} ->
         conn
-        |> put_status(:bad_request)
-        |> json(%{error: "Invalid data"})
+        |> put_status(:unprocessable_entity)
+        |> json(%{errors: format_errors(changeset)})
     end
   end
 
-
+  @doc "Updates an existing movie."
   def update(conn, %{"id" => id} = params) do
-    case Movies.update_movie(id, params) do
-      {:ok, movie} ->
-        json(conn, movie)
+    movie_params = params["movie"] || params
 
+    case Movies.get_movie(id) do
       {:error, :not_found} ->
         conn
         |> put_status(:not_found)
         |> json(%{error: "Movie not found"})
 
-      {:error, _} ->
-        conn
-        |> put_status(:bad_request)
-        |> json(%{error: "Update failed"})
+      {:ok, movie} ->
+        case Movies.update_movie(id, movie_params) do
+          {:ok, movie} ->
+            render(conn, :show, movie: movie)
+
+          {:error, changeset} ->
+            conn
+            |> put_status(:unprocessable_entity)
+            |> json(%{errors: format_errors(changeset)})
+        end
     end
   end
 
-
+  @doc "Deletes a movie."
   def delete(conn, %{"id" => id}) do
     case Movies.delete_movie(id) do
       {:ok, _} ->
@@ -66,5 +77,13 @@ defmodule FlixoraWeb.Api.MovieController do
         |> put_status(:not_found)
         |> json(%{error: "Movie not found"})
     end
+  end
+
+  defp format_errors(changeset) do
+    Ecto.Changeset.traverse_errors(changeset, fn {msg, opts} ->
+      Enum.reduce(opts, msg, fn {key, value}, acc ->
+        String.replace(acc, "%{#{key}}", to_string(value))
+      end)
+    end)
   end
 end

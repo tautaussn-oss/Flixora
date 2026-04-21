@@ -6,7 +6,7 @@ defmodule FlixoraWeb.Api.ActorJSON do
   end
 
   def show(%{actor: actor}) do
-    %{data: data(actor)}
+    %{actor: data(actor)}
   end
 
   defp data(%Actor{} = actor) do

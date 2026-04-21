@@ -92,6 +92,8 @@ defmodule Flixora.Movies do
   defp sort(query, _), do: query
 
   def create_movie(attrs) do
+
+    IO.inspect(attrs, label: "PARAMS")
     attrs =
       case Map.get(attrs, "poster") do
         %Plug.Upload{path: path} ->

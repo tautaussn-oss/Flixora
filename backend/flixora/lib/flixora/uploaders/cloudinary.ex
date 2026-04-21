@@ -7,7 +7,7 @@ defmodule Flixora.Uploaders.Cloudinary do
   @spec upload_image(String.t()) ::
           {:ok, %{url: String.t(), public_id: String.t()}} | {:error, any()}
   def upload_image(path) do
-    case Cloudex.upload(path) do
+    case Cloudex.upload(path, %{folder: "flixora"}) do
       {:ok, response} ->
         {:ok,
          %{

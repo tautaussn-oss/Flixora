@@ -35,4 +35,6 @@ defmodule FlixoraWeb.Api.MovieJSON do
       %{id: item.id, name: item.name}
     end)
   end
+
+
 end

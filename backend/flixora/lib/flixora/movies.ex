@@ -91,70 +91,95 @@ defmodule Flixora.Movies do
 
   defp sort(query, _), do: query
 
-  def create_movie(attrs) do
+ def create_movie(attrs) do
+  IO.inspect(attrs, label: "PARAMS")
 
-    IO.inspect(attrs, label: "PARAMS")
-    attrs =
-      case Map.get(attrs, "poster") do
-        %Plug.Upload{path: path} ->
-          case Cloudinary.upload_image(path) do
-            {:ok, %{url: url, public_id: public_id}} ->
-              attrs
-              |> Map.put("poster", url)
-              |> Map.put("public_id", public_id)
+  attrs =
+    case Map.get(attrs, "poster") do
+      %Plug.Upload{path: path} ->
+        case Cloudinary.upload_image(path) do
+          {:ok, %{url: url, public_id: public_id}} ->
+            attrs
+            |> Map.put("poster", url)
+            |> Map.put("public_id", public_id)
 
-            {:error, _} ->
-              Map.delete(attrs, "poster")
-          end
+          {:error, _} ->
+            Map.delete(attrs, "poster")
+        end
 
-        _ ->
-          attrs
-      end
+      url when is_binary(url) ->
+        case Cloudinary.upload_image(url) do
+          {:ok, %{url: url, public_id: public_id}} ->
+            attrs
+            |> Map.put("poster", url)
+            |> Map.put("public_id", public_id)
 
-    %Movie{}
-    |> Movie.changeset(attrs)
-    |> put_genres(attrs)
-    |> put_actors(attrs)
-    |> Repo.insert()
-  end
+          {:error, _} ->
+            Map.delete(attrs, "poster")
+        end
 
-  def update_movie(id, attrs) do
-    case Repo.get(Movie, id) do
-      nil ->
-        {:error, :not_found}
-
-      movie ->
-        movie = Repo.preload(movie, [:genres, :actors])
-
-        attrs =
-          case Map.get(attrs, "poster") do
-            %Plug.Upload{path: path} ->
-              case Cloudinary.upload_image(path) do
-                {:ok, %{url: url, public_id: public_id}} ->
-                  if movie.public_id do
-                    Cloudinary.delete_image(movie.public_id)
-                  end
-
-                  attrs
-                  |> Map.put("poster", url)
-                  |> Map.put("public_id", public_id)
-
-                {:error, _} ->
-                  Map.delete(attrs, "poster")
-              end
-
-            _ ->
-              attrs
-          end
-
-        movie
-        |> Movie.changeset(attrs)
-        |> put_genres(attrs)
-        |> put_actors(attrs)
-        |> Repo.update()
+      _ ->
+        attrs
     end
-  end
 
+  %Movie{}
+  |> Movie.changeset(attrs)
+  |> put_genres(attrs)
+  |> put_actors(attrs)
+  |> Repo.insert()
+end
+
+ def update_movie(id, attrs) do
+  case Repo.get(Movie, id) do
+    nil ->
+      {:error, :not_found}
+
+    movie ->
+      movie = Repo.preload(movie, [:genres, :actors])
+
+      attrs =
+        case Map.get(attrs, "poster") do
+          %Plug.Upload{path: path} ->
+            case Cloudinary.upload_image(path) do
+              {:ok, %{url: url, public_id: public_id}} ->
+                if movie.public_id do
+                  Cloudinary.delete_image(movie.public_id)
+                end
+
+                attrs
+                |> Map.put("poster", url)
+                |> Map.put("public_id", public_id)
+
+              {:error, _} ->
+                Map.delete(attrs, "poster")
+            end
+
+          url when is_binary(url) ->
+            case Cloudinary.upload_image(url) do
+              {:ok, %{url: url, public_id: public_id}} ->
+                if movie.public_id do
+                  Cloudinary.delete_image(movie.public_id)
+                end
+
+                attrs
+                |> Map.put("poster", url)
+                |> Map.put("public_id", public_id)
+
+              {:error, _} ->
+                Map.delete(attrs, "poster")
+            end
+
+          _ ->
+            attrs
+        end
+
+      movie
+      |> Movie.changeset(attrs)
+      |> put_genres(attrs)
+      |> put_actors(attrs)
+      |> Repo.update()
+  end
+end
   def delete_movie(id) do
     case Repo.get(Movie, id) do
       nil ->

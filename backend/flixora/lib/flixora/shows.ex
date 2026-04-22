@@ -116,42 +116,36 @@ defmodule Flixora.Shows do
     |> Repo.insert()
   end
 
-  def update_show(id, attrs) do
-    case Repo.get(Show, id) do
-      nil ->
-        {:error, :not_found}
+  def update_show(show, attrs) do
+  show = Repo.preload(show, [:genres, :actors])
 
-      show ->
-        show = Repo.preload(show, [:genres, :actors])
+  attrs =
+    case Map.get(attrs, "poster") do
+      %Plug.Upload{path: path} ->
+        case Cloudinary.upload_image(path) do
+          {:ok, %{url: url, public_id: public_id}} ->
+            if show.public_id do
+              Cloudinary.delete_image(show.public_id)
+            end
 
-        attrs =
-          case Map.get(attrs, "poster") do
-            %Plug.Upload{path: path} ->
-              case Cloudinary.upload_image(path) do
-                {:ok, %{url: url, public_id: public_id}} ->
-                  if show.public_id do
-                    Cloudinary.delete_image(show.public_id)
-                  end
+            attrs
+            |> Map.put("poster", url)
+            |> Map.put("public_id", public_id)
 
-                  attrs
-                  |> Map.put("poster", url)
-                  |> Map.put("public_id", public_id)
+          {:error, _} ->
+            Map.delete(attrs, "poster")
+        end
 
-                {:error, _} ->
-                  Map.delete(attrs, "poster")
-              end
-
-            _ ->
-              attrs
-          end
-
-        show
-        |> Show.changeset(attrs)
-        |> put_genres(attrs)
-        |> put_actors(attrs)
-        |> Repo.update()
+      _ ->
+        attrs
     end
-  end
+
+  show
+  |> Show.changeset(attrs)
+  |> put_genres(attrs)
+  |> put_actors(attrs)
+  |> Repo.update()
+end
 
   def delete_show(id) do
     case Repo.get(Show, id) do

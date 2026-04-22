@@ -54,7 +54,7 @@ defmodule FlixoraWeb.Api.ShowController do
         |> json(%{error: "Show not found"})
 
       {:ok, show} ->
-        case Shows.update_show(show, show_params) do
+        case Shows.update_show(id, show_params) do
           {:ok, show} ->
             render(conn, :show, show: show)
 

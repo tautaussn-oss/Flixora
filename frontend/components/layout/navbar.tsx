@@ -19,30 +19,25 @@ export default function Navbar() {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    const savedTheme = localStorage.getItem("flixora-theme");
+    const timer = window.setTimeout(() => {
+      const savedTheme = localStorage.getItem("flixora-theme");
+      const nextDark = savedTheme === "dark";
 
-    if (savedTheme === "dark") {
-      document.documentElement.classList.add("dark");
-      setIsDark(true);
-    } else {
-      document.documentElement.classList.remove("dark");
-      setIsDark(false);
-    }
+      document.documentElement.classList.toggle("dark", nextDark);
+      setIsDark(nextDark);
+      setMounted(true);
+    }, 0);
 
-    setMounted(true);
+    return () => {
+      window.clearTimeout(timer);
+    };
   }, []);
 
   const toggleTheme = () => {
     const nextThemeIsDark = !isDark;
 
-    if (nextThemeIsDark) {
-      document.documentElement.classList.add("dark");
-      localStorage.setItem("flixora-theme", "dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-      localStorage.setItem("flixora-theme", "light");
-    }
-
+    document.documentElement.classList.toggle("dark", nextThemeIsDark);
+    localStorage.setItem("flixora-theme", nextThemeIsDark ? "dark" : "light");
     setIsDark(nextThemeIsDark);
   };
 
@@ -107,21 +102,27 @@ export default function Navbar() {
             Kids
           </Link>
 
-          {mounted && (
-            <button
-              type="button"
-              onClick={toggleTheme}
-              className="flex h-10 w-10 items-center justify-center rounded-full transition hover:scale-105"
-              style={{
-                backgroundColor: "var(--surface)",
-                color: "var(--text)",
-                border: "1px solid var(--border)",
-              }}
-              aria-label="Toggle theme"
-            >
-              {isDark ? <Sun size={18} /> : <Moon size={18} />}
-            </button>
-          )}
+          <button
+            type="button"
+            onClick={toggleTheme}
+            className="flex h-10 w-10 items-center justify-center rounded-full transition hover:scale-105"
+            style={{
+              backgroundColor: "var(--surface)",
+              color: "var(--text)",
+              border: "1px solid var(--border)",
+            }}
+            aria-label="Toggle theme"
+          >
+            {mounted ? (
+              isDark ? (
+                <Sun size={18} />
+              ) : (
+                <Moon size={18} />
+              )
+            ) : (
+              <span className="h-[18px] w-[18px]" aria-hidden="true" />
+            )}
+          </button>
         </div>
       </div>
     </header>

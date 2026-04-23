@@ -14,6 +14,9 @@
   --footer-text: #0f172a;
   --footer-muted: #64748b;
   --accent: #2563eb;
+  --shadow-soft: 0 12px 30px rgba(15, 23, 42, 0.08);
+  --shadow-medium: 0 16px 40px rgba(15, 23, 42, 0.12);
+  --shadow-accent: 0 10px 28px rgba(37, 99, 235, 0.34);
 }
 
 html.dark {
@@ -30,6 +33,9 @@ html.dark {
   --footer-text: #f8fafc;
   --footer-muted: #94a3b8;
   --accent: #3b82f6;
+  --shadow-soft: 0 14px 36px rgba(2, 6, 23, 0.48);
+  --shadow-medium: 0 20px 48px rgba(2, 6, 23, 0.6);
+  --shadow-accent: 0 12px 32px rgba(59, 130, 246, 0.32);
 }
 
 * {
@@ -45,7 +51,7 @@ body {
 body {
   background: var(--bg);
   color: var(--text);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), "Segoe UI", "Helvetica Neue", sans-serif;
   transition:
     background-color 0.3s ease,
     color 0.3s ease;
@@ -59,4 +65,116 @@ a {
 button {
   font: inherit;
   cursor: pointer;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulseFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.48;
+  }
+
+  50% {
+    transform: translateY(-12px);
+    opacity: 0.72;
+  }
+}
+
+@keyframes shimmerMove {
+  from {
+    background-position: 200% 0;
+  }
+
+  to {
+    background-position: -200% 0;
+  }
+}
+
+.home-fade-up {
+  animation: fadeUp 650ms ease-out both;
+}
+
+.home-fade-up-delay-1 {
+  animation: fadeUp 760ms ease-out both;
+}
+
+.home-fade-up-delay-2 {
+  animation: fadeUp 920ms ease-out both;
+}
+
+.home-card-glow {
+  animation: fadeUp 580ms ease-out both;
+  box-shadow: var(--shadow-soft);
+  transition:
+    transform 220ms ease,
+    box-shadow 220ms ease,
+    border-color 220ms ease;
+}
+
+.home-card-glow:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-medium);
+  border-color: color-mix(in srgb, var(--accent) 36%, var(--border));
+}
+
+.home-aurora {
+  position: absolute;
+  z-index: 0;
+  border-radius: 9999px;
+  filter: blur(52px);
+  pointer-events: none;
+  animation: pulseFloat 7.2s ease-in-out infinite;
+}
+
+.home-aurora-left {
+  left: -88px;
+  top: -80px;
+  width: 220px;
+  height: 220px;
+  background: color-mix(in srgb, var(--accent) 60%, transparent);
+}
+
+.home-aurora-right {
+  right: -88px;
+  bottom: -80px;
+  width: 240px;
+  height: 240px;
+  background: color-mix(in srgb, #22d3ee 52%, transparent);
+  animation-delay: 1.8s;
+}
+
+.hero-bg-transition {
+  transition:
+    background-image 420ms ease-in-out,
+    transform 420ms ease-in-out;
+}
+
+.home-stagger-item {
+  animation-name: fadeUp;
+  animation-duration: 560ms;
+  animation-fill-mode: both;
+  animation-timing-function: ease-out;
+}
+
+.skeleton-shimmer {
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--surface) 88%, #ffffff 4%) 0%,
+    color-mix(in srgb, var(--surface) 82%, #ffffff 16%) 50%,
+    color-mix(in srgb, var(--surface) 88%, #ffffff 4%) 100%
+  );
+  background-size: 220% 100%;
+  animation: shimmerMove 1.45s linear infinite;
 }

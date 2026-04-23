@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 type HeroBannerProps = {
   item: {
     id: number;
@@ -23,10 +25,13 @@ export default function HeroBanner({ item }: HeroBannerProps) {
         }}
       >
         <div className="absolute inset-0">
-          <img
+          <Image
             src={item.image}
             alt={item.title}
-            className="h-full w-full object-cover"
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover"
           />
 
           <div className="absolute inset-0 bg-black/55" />
@@ -120,10 +125,12 @@ export default function HeroBanner({ item }: HeroBannerProps) {
             <div className="lg:justify-self-end">
               <div className="relative overflow-hidden rounded-4xl bg-white/10 p-4 backdrop-blur-xl">
                 <div className="relative overflow-hidden rounded-[28px]">
-                  <img
+                  <Image
                     src={item.image}
-                    className="h-120 w-full object-cover"
                     alt={item.title}
+                    width={640}
+                    height={768}
+                    className="h-120 w-full object-cover"
                   />
 
                   <div className="absolute inset-0 bg-linear-to-t from-black via-black/40 to-transparent" />

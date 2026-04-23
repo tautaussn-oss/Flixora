@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 type MovieCardProps = {
   title: string;
   year: string;
@@ -23,10 +25,12 @@ export default function MovieCard({
       }}
     >
       <div className="relative h-90 overflow-hidden">
-        <img
+        <Image
           src={image}
           alt={title}
-          className="h-full w-full object-cover transition duration-700 group-hover:scale-110"
+          fill
+          sizes="(max-width: 640px) 85vw, (max-width: 1280px) 45vw, 380px"
+          className="object-cover transition duration-700 group-hover:scale-110"
         />
 
         <div className="absolute inset-0 bg-linear-to-t from-black via-black/30 to-transparent opacity-95" />

@@ -1,7 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+  type ReactNode,
+} from "react";
 import {
   CalendarDays,
   Clock3,
@@ -86,7 +92,11 @@ export default function MoviePageClient() {
   const [kidsOnly, setKidsOnly] = useState(false);
   const [sortBy, setSortBy] = useState<SortOption>("featured");
 
-  const [trailerModal, setTrailerModal] = useState<{ open: boolean; url: string; title: string }>({
+  const [trailerModal, setTrailerModal] = useState<{
+    open: boolean;
+    url: string;
+    title: string;
+  }>({
     open: false,
     url: "",
     title: "",
@@ -130,7 +140,16 @@ export default function MoviePageClient() {
 
   useEffect(() => {
     setVisibleCount(PAGE_SIZE);
-  }, [query, selectedGenre, selectedActor, selectedYear, durationFilter, featuredOnly, kidsOnly, sortBy]);
+  }, [
+    query,
+    selectedGenre,
+    selectedActor,
+    selectedYear,
+    durationFilter,
+    featuredOnly,
+    kidsOnly,
+    sortBy,
+  ]);
 
   const years = useMemo(() => {
     return Array.from(new Set(movies.map((movie) => movie.year)))
@@ -144,19 +163,29 @@ export default function MoviePageClient() {
     const filtered = movies.filter((movie) => {
       if (normalizedQuery) {
         const inTitle = movie.title.toLowerCase().includes(normalizedQuery);
-        const inDescription = movie.description.toLowerCase().includes(normalizedQuery);
-        const inGenre = movie.genreNames.some((genre) => genre.toLowerCase().includes(normalizedQuery));
+        const inDescription = movie.description
+          .toLowerCase()
+          .includes(normalizedQuery);
+        const inGenre = movie.genreNames.some((genre) =>
+          genre.toLowerCase().includes(normalizedQuery),
+        );
 
         if (!inTitle && !inDescription && !inGenre) {
           return false;
         }
       }
 
-      if (selectedGenre !== "all" && !movie.genreNames.includes(selectedGenre)) {
+      if (
+        selectedGenre !== "all" &&
+        !movie.genreNames.includes(selectedGenre)
+      ) {
         return false;
       }
 
-      if (selectedActor !== "all" && !movie.actorNames.includes(selectedActor)) {
+      if (
+        selectedActor !== "all" &&
+        !movie.actorNames.includes(selectedActor)
+      ) {
         return false;
       }
 
@@ -164,11 +193,17 @@ export default function MoviePageClient() {
         return false;
       }
 
-      if (durationFilter === "short" && !(movie.duration > 0 && movie.duration < 100)) {
+      if (
+        durationFilter === "short" &&
+        !(movie.duration > 0 && movie.duration < 100)
+      ) {
         return false;
       }
 
-      if (durationFilter === "medium" && !(movie.duration >= 100 && movie.duration <= 140)) {
+      if (
+        durationFilter === "medium" &&
+        !(movie.duration >= 100 && movie.duration <= 140)
+      ) {
         return false;
       }
 
@@ -246,7 +281,10 @@ export default function MoviePageClient() {
               <div className="max-w-3xl">
                 <p
                   className="inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em]"
-                  style={{ borderColor: "var(--border)", color: "var(--accent)" }}
+                  style={{
+                    borderColor: "var(--border)",
+                    color: "var(--accent)",
+                  }}
                 >
                   <Sparkles size={14} />
                   Movies Catalog
@@ -256,21 +294,29 @@ export default function MoviePageClient() {
                   Discover, filter, and explore every movie trailer in Flixora.
                 </h1>
 
-                <p className="mt-4 max-w-2xl text-sm leading-7 md:text-base" style={{ color: "var(--muted)" }}>
-                  Search by title, filter by genres, actors, release year, duration,
-                  and sort exactly how you want.
+                <p
+                  className="mt-4 max-w-2xl text-sm leading-7 md:text-base"
+                  style={{ color: "var(--muted)" }}
+                >
+                  Search by title, filter by genres, actors, release year,
+                  duration, and sort exactly how you want.
                 </p>
               </div>
 
               <div className="grid min-w-[210px] gap-3 sm:grid-cols-2">
-                <MetricCard label="Total Movies" value={String(movies.length)} />
+                <MetricCard
+                  label="Total Movies"
+                  value={String(movies.length)}
+                />
                 <MetricCard
                   label="Filtered Result"
                   value={loading ? "..." : String(filteredMovies.length)}
                 />
                 <MetricCard
                   label="Featured"
-                  value={String(movies.filter((movie) => movie.featured).length)}
+                  value={String(
+                    movies.filter((movie) => movie.featured).length,
+                  )}
                 />
                 <MetricCard
                   label="Kids"
@@ -282,7 +328,10 @@ export default function MoviePageClient() {
 
           <section
             className="mt-8 rounded-3xl border p-5 md:p-6"
-            style={{ borderColor: "var(--border)", backgroundColor: "var(--surface)" }}
+            style={{
+              borderColor: "var(--border)",
+              backgroundColor: "var(--surface)",
+            }}
           >
             <div className="mb-4 flex items-center justify-between gap-4">
               <h2 className="inline-flex items-center gap-2 text-lg font-semibold md:text-xl">
@@ -294,14 +343,23 @@ export default function MoviePageClient() {
                 type="button"
                 onClick={clearFilters}
                 className="rounded-full border px-4 py-2 text-sm font-medium transition hover:-translate-y-0.5"
-                style={{ borderColor: "var(--border)", backgroundColor: "var(--surface-strong)" }}
+                style={{
+                  borderColor: "var(--border)",
+                  backgroundColor: "var(--surface-strong)",
+                }}
               >
                 Reset filters
               </button>
             </div>
 
             <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-4">
-              <label className="flex items-center gap-2 rounded-2xl border px-3 py-2" style={{ borderColor: "var(--border)", backgroundColor: "var(--surface-strong)" }}>
+              <label
+                className="flex items-center gap-2 rounded-2xl border px-3 py-2"
+                style={{
+                  borderColor: "var(--border)",
+                  backgroundColor: "var(--surface-strong)",
+                }}
+              >
                 <Search size={16} style={{ color: "var(--muted)" }} />
                 <input
                   value={query}
@@ -316,7 +374,9 @@ export default function MoviePageClient() {
                 onChange={setSelectedGenre}
                 icon={<Tags size={16} />}
                 options={["all", ...genres.map((genre) => genre.name)]}
-                formatLabel={(value) => (value === "all" ? "All genres" : value)}
+                formatLabel={(value) =>
+                  value === "all" ? "All genres" : value
+                }
               />
 
               <SelectField
@@ -324,7 +384,9 @@ export default function MoviePageClient() {
                 onChange={setSelectedActor}
                 icon={<User size={16} />}
                 options={["all", ...actors.map((actor) => actor.name)]}
-                formatLabel={(value) => (value === "all" ? "All actors" : value)}
+                formatLabel={(value) =>
+                  value === "all" ? "All actors" : value
+                }
               />
 
               <SelectField
@@ -352,7 +414,14 @@ export default function MoviePageClient() {
                 value={sortBy}
                 onChange={(value) => setSortBy(value as SortOption)}
                 icon={<RefreshCcw size={16} />}
-                options={["featured", "newest", "oldest", "title-asc", "title-desc", "duration-desc"]}
+                options={[
+                  "featured",
+                  "newest",
+                  "oldest",
+                  "title-asc",
+                  "title-desc",
+                  "duration-desc",
+                ]}
                 formatLabel={(value) => {
                   if (value === "featured") return "Sort: Featured";
                   if (value === "newest") return "Sort: Newest";
@@ -368,7 +437,11 @@ export default function MoviePageClient() {
                 onChange={setFeaturedOnly}
                 label="Featured only"
               />
-              <ToggleChip checked={kidsOnly} onChange={setKidsOnly} label="Kids only" />
+              <ToggleChip
+                checked={kidsOnly}
+                onChange={setKidsOnly}
+                label="Kids only"
+              />
             </div>
           </section>
 
@@ -379,7 +452,10 @@ export default function MoviePageClient() {
                   <div
                     key={index}
                     className="rounded-3xl border p-4"
-                    style={{ borderColor: "var(--border)", backgroundColor: "var(--surface)" }}
+                    style={{
+                      borderColor: "var(--border)",
+                      backgroundColor: "var(--surface)",
+                    }}
                   >
                     <div className="skeleton-shimmer h-52 rounded-2xl" />
                     <div className="skeleton-shimmer mt-4 h-5 w-2/3 rounded" />
@@ -392,7 +468,10 @@ export default function MoviePageClient() {
             ) : error ? (
               <div
                 className="rounded-3xl border p-6"
-                style={{ borderColor: "var(--border)", backgroundColor: "var(--surface)" }}
+                style={{
+                  borderColor: "var(--border)",
+                  backgroundColor: "var(--surface)",
+                }}
               >
                 <p style={{ color: "var(--muted)" }}>{error}</p>
                 <button
@@ -407,7 +486,10 @@ export default function MoviePageClient() {
             ) : visibleMovies.length === 0 ? (
               <div
                 className="rounded-3xl border p-6"
-                style={{ borderColor: "var(--border)", backgroundColor: "var(--surface)" }}
+                style={{
+                  borderColor: "var(--border)",
+                  backgroundColor: "var(--surface)",
+                }}
               >
                 <p style={{ color: "var(--muted)" }}>
                   No movies match the current filters.
@@ -424,8 +506,11 @@ export default function MoviePageClient() {
             ) : (
               <>
                 <div className="mb-4 text-sm" style={{ color: "var(--muted)" }}>
-                  Showing <span className="font-semibold">{visibleMovies.length}</span> of{" "}
-                  <span className="font-semibold">{filteredMovies.length}</span> results
+                  Showing{" "}
+                  <span className="font-semibold">{visibleMovies.length}</span>{" "}
+                  of{" "}
+                  <span className="font-semibold">{filteredMovies.length}</span>{" "}
+                  results
                 </div>
 
                 <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
@@ -463,7 +548,9 @@ export default function MoviePageClient() {
                         </div>
 
                         <div className="absolute bottom-4 left-4 right-4 text-white">
-                          <h3 className="line-clamp-1 text-xl font-bold">{movie.title}</h3>
+                          <h3 className="line-clamp-1 text-xl font-bold">
+                            {movie.title}
+                          </h3>
                           <p className="mt-1 line-clamp-2 text-sm text-white/80">
                             {movie.description}
                           </p>
@@ -471,15 +558,20 @@ export default function MoviePageClient() {
                       </div>
 
                       <div className="space-y-4 p-4">
-                        <div className="flex flex-wrap gap-2 text-xs" style={{ color: "var(--muted)" }}>
+                        <div
+                          className="flex flex-wrap gap-2 text-xs"
+                          style={{ color: "var(--muted)" }}
+                        >
                           <span className="inline-flex items-center gap-1">
                             <CalendarDays size={14} /> {movie.year || "N/A"}
                           </span>
                           <span className="inline-flex items-center gap-1">
-                            <Clock3 size={14} /> {movie.duration ? `${movie.duration} min` : "N/A"}
+                            <Clock3 size={14} />{" "}
+                            {movie.duration ? `${movie.duration} min` : "N/A"}
                           </span>
                           <span className="inline-flex items-center gap-1">
-                            <Tags size={14} /> {movie.genreNames[0] ?? "General"}
+                            <Tags size={14} />{" "}
+                            {movie.genreNames[0] ?? "General"}
                           </span>
                         </div>
 
@@ -514,9 +606,14 @@ export default function MoviePageClient() {
                   <div className="mt-8 flex justify-center">
                     <button
                       type="button"
-                      onClick={() => setVisibleCount((prev) => prev + PAGE_SIZE)}
+                      onClick={() =>
+                        setVisibleCount((prev) => prev + PAGE_SIZE)
+                      }
                       className="rounded-full px-6 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5"
-                      style={{ backgroundColor: "var(--accent)", boxShadow: "var(--shadow-accent)" }}
+                      style={{
+                        backgroundColor: "var(--accent)",
+                        boxShadow: "var(--shadow-accent)",
+                      }}
                     >
                       Load more movies
                     </button>
@@ -554,7 +651,10 @@ function SelectField({
   return (
     <label
       className="flex items-center gap-2 rounded-2xl border px-3 py-2"
-      style={{ borderColor: "var(--border)", backgroundColor: "var(--surface-strong)" }}
+      style={{
+        borderColor: "var(--border)",
+        backgroundColor: "var(--surface-strong)",
+      }}
     >
       <span style={{ color: "var(--muted)" }}>{icon}</span>
       <select
@@ -601,7 +701,10 @@ function MetricCard({ label, value }: { label: string; value: string }) {
   return (
     <div
       className="rounded-2xl border p-3"
-      style={{ borderColor: "var(--border)", backgroundColor: "var(--surface)" }}
+      style={{
+        borderColor: "var(--border)",
+        backgroundColor: "var(--surface)",
+      }}
     >
       <p className="text-xs" style={{ color: "var(--muted)" }}>
         {label}

@@ -70,20 +70,6 @@ defmodule Flixora.Shows do
 
   defp filter_kids(query, _), do: query
 
-  defp sort(query, %{"sort" => "year"}) do
-    from m in query, order_by: [desc: m.year]
-  end
-
-  defp sort(query, %{"sort" => "title"}) do
-    from m in query, order_by: [asc: m.title]
-  end
-
-  defp sort(query, %{"sort" => "duration"}) do
-    from m in query, order_by: [desc: m.duration]
-  end
-
-  defp sort(query, _), do: query
-
   def get_show(id) do
     case Repo.get(Show, id) do
       nil -> {:error, :not_found}
@@ -91,11 +77,36 @@ defmodule Flixora.Shows do
     end
   end
 
+  defp sort(query, %{"sort" => "year"}) do
+    from s in query, order_by: [desc: s.year]
+  end
+
+  defp sort(query, %{"sort" => "title"}) do
+    from s in query, order_by: [asc: s.title]
+  end
+
+  defp sort(query, %{"sort" => "duration"}) do
+    from s in query, order_by: [desc: s.duration]
+  end
+
+  defp sort(query, _), do: query
+
   def create_show(attrs) do
     attrs =
       case Map.get(attrs, "poster") do
         %Plug.Upload{path: path} ->
           case Cloudinary.upload_image(path) do
+            {:ok, %{url: url, public_id: public_id}} ->
+              attrs
+              |> Map.put("poster", url)
+              |> Map.put("public_id", public_id)
+
+            {:error, _} ->
+              Map.delete(attrs, "poster")
+          end
+
+        url when is_binary(url) ->
+          case Cloudinary.upload_image(url) do
             {:ok, %{url: url, public_id: public_id}} ->
               attrs
               |> Map.put("poster", url)
@@ -128,6 +139,21 @@ defmodule Flixora.Shows do
           case Map.get(attrs, "poster") do
             %Plug.Upload{path: path} ->
               case Cloudinary.upload_image(path) do
+                {:ok, %{url: url, public_id: public_id}} ->
+                  if show.public_id do
+                    Cloudinary.delete_image(show.public_id)
+                  end
+
+                  attrs
+                  |> Map.put("poster", url)
+                  |> Map.put("public_id", public_id)
+
+                {:error, _} ->
+                  Map.delete(attrs, "poster")
+              end
+
+            url when is_binary(url) ->
+              case Cloudinary.upload_image(url) do
                 {:ok, %{url: url, public_id: public_id}} ->
                   if show.public_id do
                     Cloudinary.delete_image(show.public_id)

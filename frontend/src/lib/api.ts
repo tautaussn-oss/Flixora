@@ -1,4 +1,29 @@
 const API_BASE_URL = "https://flixora-jjjq.onrender.com";
+const INTERNAL_PROXY_BASE = "/api/flixora";
+
+const isBrowser = () => typeof window !== "undefined";
+
+function resolveApiUrl(path: string) {
+  if (isBrowser()) {
+    return `${INTERNAL_PROXY_BASE}${path.replace(/^\/api/, "")}`;
+  }
+
+  return `${API_BASE_URL}${path}`;
+}
+
+function withRevalidate(seconds: number): RequestInit {
+  if (isBrowser()) {
+    return {
+      cache: "no-store",
+      headers: { Accept: "application/json" },
+    };
+  }
+
+  return {
+    headers: { Accept: "application/json" },
+    next: { revalidate: seconds },
+  };
+}
 
 export type NamedEntity = {
   id: number;
@@ -74,74 +99,79 @@ export type CategoryItem = {
   image: string;
 };
 
-export async function getMovies(): Promise<ApiMovie[]> {
-  const res = await fetch(`${API_BASE_URL}/api/movies`, {
-    next: { revalidate: 600 },
-  });
+import { FALLBACK_MOVIES } from "./fallback-movies";
 
-  if (!res.ok) {
-    throw new Error(`Failed to fetch movies: ${res.status}`);
+async function safeJson<T>(
+  path: string,
+  revalidateSeconds: number,
+): Promise<{ ok: true; data: T } | { ok: false; status: number | null }> {
+  try {
+    const res = await fetch(resolveApiUrl(path), withRevalidate(revalidateSeconds));
+
+    if (!res.ok) {
+      return { ok: false, status: res.status };
+    }
+
+    const data = (await res.json()) as T;
+    return { ok: true, data };
+  } catch {
+    return { ok: false, status: null };
+  }
+}
+
+export async function getMovies(): Promise<ApiMovie[]> {
+  const firstTry = await safeJson<{ movies?: ApiMovie[] }>("/api/movies", 600);
+  if (firstTry.ok && Array.isArray(firstTry.data.movies)) {
+    return firstTry.data.movies;
   }
 
-  const data = (await res.json()) as { movies?: ApiMovie[] };
-  return Array.isArray(data.movies) ? data.movies : [];
+  const retry = await safeJson<{ movies?: ApiMovie[] }>("/api/movies", 30);
+  if (retry.ok && Array.isArray(retry.data.movies)) {
+    return retry.data.movies;
+  }
+
+  return FALLBACK_MOVIES;
 }
 
 export async function getMovieById(id: string | number): Promise<ApiMovie> {
-  const res = await fetch(`${API_BASE_URL}/api/movies/${id}`, {
-    next: { revalidate: 180 },
-  });
-
-  if (!res.ok) {
-    throw new Error(`Failed to fetch movie ${id}: ${res.status}`);
+  const result = await safeJson<{ movie?: ApiMovie }>(`/api/movies/${id}`, 180);
+  if (result.ok && result.data.movie) {
+    return result.data.movie;
   }
 
-  const data = (await res.json()) as { movie?: ApiMovie };
-
-  if (!data.movie) {
-    throw new Error(`Movie ${id} is missing in API response`);
+  const fallback = FALLBACK_MOVIES.find((movie) => String(movie.id) === String(id));
+  if (fallback) {
+    return fallback;
   }
 
-  return data.movie;
+  throw new Error(`Failed to fetch movie ${id}`);
 }
 
 export async function getShows(): Promise<ApiShow[]> {
-  const res = await fetch(`${API_BASE_URL}/api/shows`, {
-    next: { revalidate: 120 },
-  });
-
-  if (!res.ok) {
-    throw new Error(`Failed to fetch shows: ${res.status}`);
+  const result = await safeJson<{ shows?: ApiShow[] }>("/api/shows", 120);
+  if (result.ok && Array.isArray(result.data.shows)) {
+    return result.data.shows;
   }
 
-  const data = (await res.json()) as { shows?: ApiShow[] };
-  return Array.isArray(data.shows) ? data.shows : [];
+  return [];
 }
 
 export async function getGenres(): Promise<ApiGenre[]> {
-  const res = await fetch(`${API_BASE_URL}/api/genres`, {
-    next: { revalidate: 600 },
-  });
-
-  if (!res.ok) {
-    throw new Error(`Failed to fetch genres: ${res.status}`);
+  const result = await safeJson<{ genres?: ApiGenre[] }>("/api/genres", 600);
+  if (result.ok && Array.isArray(result.data.genres)) {
+    return result.data.genres;
   }
 
-  const data = (await res.json()) as { genres?: ApiGenre[] };
-  return Array.isArray(data.genres) ? data.genres : [];
+  return [];
 }
 
 export async function getActors(): Promise<ApiActor[]> {
-  const res = await fetch(`${API_BASE_URL}/api/actors`, {
-    next: { revalidate: 600 },
-  });
-
-  if (!res.ok) {
-    throw new Error(`Failed to fetch actors: ${res.status}`);
+  const result = await safeJson<{ actors?: ApiActor[] }>("/api/actors", 600);
+  if (result.ok && Array.isArray(result.data.actors)) {
+    return result.data.actors;
   }
 
-  const data = (await res.json()) as { actors?: ApiActor[] };
-  return Array.isArray(data.actors) ? data.actors : [];
+  return [];
 }
 
 export function resolveMediaImage(poster: string) {

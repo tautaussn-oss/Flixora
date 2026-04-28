@@ -17,9 +17,9 @@ defmodule Flixora.Repo.Migrations.DeleteTimestampsManyToManyTables do
       remove :updated_at
     end
 
-    alter table(:shows_genres) do
-      remove :inserted_at
-      remove :updated_at
-    end
+    # alter table(:shows_genres) do
+    #   remove :inserted_at
+    #   remove :updated_at
+    # end
   end
 end

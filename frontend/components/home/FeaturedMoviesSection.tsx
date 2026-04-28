@@ -1,7 +1,14 @@
 "use client";
 
 import { useMemo, useRef, useState } from "react";
-import { ArrowLeft, ArrowRight, CalendarDays, Clock3, Film, Star } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  CalendarDays,
+  Clock3,
+  Film,
+  Star,
+} from "lucide-react";
 import type { HomeMovie } from "./home-types";
 
 type FeaturedMoviesSectionProps = {
@@ -50,7 +57,10 @@ export default function FeaturedMoviesSection({
   const scrollRail = (direction: "left" | "right") => {
     if (!railRef.current) return;
 
-    const scrollAmount = Math.max(360, Math.round(railRef.current.clientWidth * 0.78));
+    const scrollAmount = Math.max(
+      360,
+      Math.round(railRef.current.clientWidth * 0.78),
+    );
     railRef.current.scrollBy({
       left: direction === "right" ? scrollAmount : -scrollAmount,
       behavior: "smooth",
@@ -81,7 +91,10 @@ export default function FeaturedMoviesSection({
             type="button"
             onClick={() => scrollRail("left")}
             className="rounded-full border p-2.5 transition duration-200 hover:-translate-y-0.5"
-            style={{ borderColor: "var(--border)", backgroundColor: "var(--surface)" }}
+            style={{
+              borderColor: "var(--border)",
+              backgroundColor: "var(--surface)",
+            }}
             aria-label="Scroll featured movies left"
           >
             <ArrowLeft size={18} />
@@ -90,7 +103,10 @@ export default function FeaturedMoviesSection({
             type="button"
             onClick={() => scrollRail("right")}
             className="rounded-full border p-2.5 transition duration-200 hover:-translate-y-0.5"
-            style={{ borderColor: "var(--border)", backgroundColor: "var(--surface)" }}
+            style={{
+              borderColor: "var(--border)",
+              backgroundColor: "var(--surface)",
+            }}
             aria-label="Scroll featured movies right"
           >
             <ArrowRight size={18} />
@@ -171,7 +187,7 @@ export default function FeaturedMoviesSection({
           {filtered.map((movie, index) => (
             <article
               key={movie.id}
-              className="home-card-glow home-stagger-item relative w-[86vw] min-w-[86vw] snap-start overflow-hidden rounded-3xl border sm:w-[64vw] sm:min-w-[64vw] lg:w-[430px] lg:min-w-[430px]"
+              className="home-card-glow home-stagger-item relative w-[86vw] min-w-[86vw] snap-start overflow-hidden rounded-3xl border sm:w-[64vw] sm:min-w-[64vw] lg:w-107.5 lg:min-w-107.5"
               style={{
                 borderColor: "var(--border)",
                 backgroundColor: "var(--card)",
@@ -186,7 +202,7 @@ export default function FeaturedMoviesSection({
                   backgroundSize: "cover",
                 }}
               >
-                <div className="absolute inset-0 bg-gradient-to-t from-black/82 via-black/32 to-black/8" />
+                <div className="absolute inset-0 bg-linear-to-t from-black/82 via-black/32 to-black/8" />
 
                 <div className="absolute left-4 top-4 flex items-center gap-2">
                   <span className="rounded-full bg-black/45 px-3 py-1 text-xs font-semibold text-white backdrop-blur">
@@ -198,7 +214,9 @@ export default function FeaturedMoviesSection({
                 </div>
 
                 <div className="absolute bottom-4 left-4 right-4 text-white">
-                  <h3 className="line-clamp-1 text-xl font-bold">{movie.title}</h3>
+                  <h3 className="line-clamp-1 text-xl font-bold">
+                    {movie.title}
+                  </h3>
                   <p className="mt-1 line-clamp-2 text-sm text-white/80">
                     {movie.description}
                   </p>
@@ -206,12 +224,16 @@ export default function FeaturedMoviesSection({
               </div>
 
               <div className="space-y-3 p-4">
-                <div className="flex flex-wrap items-center gap-3 text-xs" style={{ color: "var(--muted)" }}>
+                <div
+                  className="flex flex-wrap items-center gap-3 text-xs"
+                  style={{ color: "var(--muted)" }}
+                >
                   <span className="inline-flex items-center gap-1">
                     <CalendarDays size={14} /> {movie.year || "N/A"}
                   </span>
                   <span className="inline-flex items-center gap-1">
-                    <Clock3 size={14} /> {movie.duration ? `${movie.duration} min` : "N/A"}
+                    <Clock3 size={14} />{" "}
+                    {movie.duration ? `${movie.duration} min` : "N/A"}
                   </span>
                   <span className="inline-flex items-center gap-1">
                     <Star size={14} /> IMDb
@@ -246,7 +268,7 @@ function SkeletonRail() {
       {Array.from({ length: 3 }).map((_, index) => (
         <div
           key={index}
-          className="w-[86vw] min-w-[86vw] rounded-3xl border p-4 sm:w-[64vw] sm:min-w-[64vw] lg:w-[430px] lg:min-w-[430px]"
+          className="w-[86vw] min-w-[86vw] rounded-3xl border p-4 sm:w-[64vw] sm:min-w-[64vw] lg:w-107.5 lg:min-w-107.5"
           style={{
             borderColor: "var(--border)",
             backgroundColor: "var(--surface)",

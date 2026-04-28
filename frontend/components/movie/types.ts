@@ -1,17 +1,10 @@
-export type Movie = {
-  id: number;
-  title: string;
-  description: string;
-  year: number;
-  duration: number;
-  genres: string[];
-  actors: string[];
-  poster: string;
-  trailer: string;
-};
+import type { CatalogMovie } from "@/src/lib/movie-catalog";
+
+export type Movie = CatalogMovie;
 
 export type FiltersState = {
   search: string;
   genre: string;
   actor: string;
+  year: string;
 };

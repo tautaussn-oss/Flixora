@@ -59,7 +59,7 @@ export default function TrailerModal({
 
   return (
     <div
-      className="fixed inset-0 z-[70] flex items-center justify-center bg-black/72 px-4 py-8 backdrop-blur-sm"
+      className="fixed inset-0 z-70 flex items-center justify-center bg-black/72 px-4 py-8 backdrop-blur-sm"
       role="dialog"
       aria-modal="true"
       aria-label={`${title} trailer`}
@@ -78,7 +78,9 @@ export default function TrailerModal({
           className="flex items-center justify-between border-b px-4 py-3 md:px-5"
           style={{ borderColor: "var(--border)" }}
         >
-          <h3 className="line-clamp-1 text-base font-semibold md:text-lg">{title} Trailer</h3>
+          <h3 className="line-clamp-1 text-base font-semibold md:text-lg">
+            {title} Trailer
+          </h3>
           <button
             type="button"
             onClick={onClose}

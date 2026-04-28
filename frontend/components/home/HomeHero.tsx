@@ -1,4 +1,11 @@
-import { ChevronLeft, ChevronRight, Clock3, Play, Plus, Star } from "lucide-react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Clock3,
+  Play,
+  Plus,
+  Star,
+} from "lucide-react";
 import type { HomeMovie } from "./home-types";
 
 type HomeHeroProps = {
@@ -38,10 +45,10 @@ export default function HomeHero({
         }}
       />
 
-      <div className="absolute inset-0 bg-gradient-to-r from-black/88 via-black/62 to-black/28" />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/72 via-black/8 to-black/36" />
+      <div className="absolute inset-0 bg-linear-to-r from-black/88 via-black/62 to-black/28" />
+      <div className="absolute inset-0 bg-linear-to-t from-black/72 via-black/8 to-black/36" />
 
-      <div className="relative min-h-[520px] p-8 md:p-10 lg:min-h-[600px] lg:p-12">
+      <div className="relative min-h-130 p-8 md:p-10 lg:min-h-150 lg:p-12">
         <div className="max-w-2xl text-white">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white/72">
             Flixora Originals Style
@@ -100,7 +107,9 @@ export default function HomeHero({
             ))}
           </div>
 
-          <p className="mt-6 text-sm text-white/70">Library size: {movies.length} movies</p>
+          <p className="mt-6 text-sm text-white/70">
+            Library size: {movies.length} movies
+          </p>
         </div>
 
         <div className="absolute right-4 top-1/2 hidden -translate-y-1/2 gap-2 md:flex">
